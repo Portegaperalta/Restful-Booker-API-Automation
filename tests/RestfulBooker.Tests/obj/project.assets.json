@@ -419,6 +419,16 @@
         "build": {
           "build/net8.0/xunit.runner.visualstudio.props": {}
         }
+      },
+      "models/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "compile": {
+          "bin/placeholder/models.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/models.dll": {}
+        }
       }
     }
   },
@@ -979,6 +989,11 @@
         "xunit.runner.visualstudio.3.1.4.nupkg.sha512",
         "xunit.runner.visualstudio.nuspec"
       ]
+    },
+    "models/1.0.0": {
+      "type": "project",
+      "path": "../../src/models/models.csproj",
+      "msbuildProject": "../../src/models/models.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -987,6 +1002,7 @@
       "Microsoft.NET.Test.Sdk >= 17.14.1",
       "RestSharp >= 113.1.0",
       "coverlet.collector >= 6.0.4",
+      "models >= 1.0.0",
       "xunit >= 2.9.3",
       "xunit.runner.visualstudio >= 3.1.4"
     ]
@@ -1023,7 +1039,11 @@
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\Pablo\\Desktop\\CODING\\QA testing projects\\Restful-Booker-API-Automation\\src\\models\\models.csproj": {
+              "projectPath": "C:\\Users\\Pablo\\Desktop\\CODING\\QA testing projects\\Restful-Booker-API-Automation\\src\\models\\models.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
