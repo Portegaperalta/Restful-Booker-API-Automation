@@ -7,17 +7,22 @@ using RestSharp.Authenticators;
 
 public class RestfulBookerAPITests
 {
-  private readonly string baseUrl = "https://restful-booker.herokuapp.com";
-  private readonly string testUsername = "admin";
-  private readonly string testUserPassword = "password123";
+  private readonly string _baseUrl = "https://restful-booker.herokuapp.com";
+  private readonly string _authUrl;
+  private readonly string _bookingUrl;
+  private readonly string _testUsername = "admin";
+  private readonly string _testUserPassword = "password123";
   private readonly RestClientOptions _options;
 
   public RestfulBookerAPITests()
   {
-    _options = new RestClientOptions(baseUrl)
+    _options = new RestClientOptions(_baseUrl)
     {
-      Authenticator = new HttpBasicAuthenticator(testUsername, testUserPassword)
+      Authenticator = new HttpBasicAuthenticator(_testUsername, _testUserPassword)
     };
+
+    _authUrl = $"{_baseUrl}/auth";
+    _bookingUrl = $"{_baseUrl}/booking";
   }
 
   [Fact]
