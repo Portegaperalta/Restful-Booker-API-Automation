@@ -25,4 +25,16 @@ public class RestfulBookerAPITests
   {
 
   }
+
+  // Helper Functions
+
+  private RestClient CreateRestClient()
+  {
+    return new RestClient(_options);
+  }
+
+  private RestRequest CreateRestRequest(string url)
+  {
+    return new RestRequest(url);
+  }
 }
