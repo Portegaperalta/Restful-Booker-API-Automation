@@ -2,7 +2,7 @@
 
 ---
 
-1. Overview
+## 1. Overview
 
 This test plan establishes a range of test cases designed to verify the correct functionality and data consistency of the Restful Booker API.
 
