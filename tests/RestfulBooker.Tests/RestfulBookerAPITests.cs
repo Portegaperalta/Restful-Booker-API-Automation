@@ -11,16 +11,10 @@ using Xunit.Abstractions;
 public class RestfulBookerAPITests
 {
   private readonly string _baseUrl = "https://restful-booker.herokuapp.com";
-  private readonly string _authUrl;
-  private readonly string _bookingUrl;
-  private readonly string _testUsername = "admin";
-  private readonly string _testUserPassword = "password123";
   private readonly ITestOutputHelper _outputHelper;
 
   public RestfulBookerAPITests(ITestOutputHelper outputHelper)
   {
-    _authUrl = $"{_baseUrl}/auth";
-    _bookingUrl = $"{_baseUrl}/booking";
     _outputHelper = outputHelper;
   }
 
