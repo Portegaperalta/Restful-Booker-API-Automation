@@ -3,6 +3,7 @@ namespace RestfulBooker.Tests;
 using RestSharp;
 using Xunit;
 using FluentAssertions;
+using Models;
 using RestSharp.Authenticators;
 
 public class RestfulBookerAPITests
@@ -22,7 +23,70 @@ public class RestfulBookerAPITests
   [Fact]
   public async Task CreateToken_ReturnsValidAuthToken()
   {
+    //Arrange
+    var client = CreateRestClient(_baseUrl);
 
+    var authRequest = new AuthRequest
+    {
+      Username = "admin",
+      Password = "password123"
+    };
+
+    var request = CreatePostRequest("auth");
+    request.AddJsonBody(authRequest);
+
+    //Act
+    var response = await client.ExecuteAsync<AuthResponse>(request);
+
+    //Assert
+    var data = response.Data;
+
+    data.Should().NotBeNull();
+    data.Should().BeOfType<AuthResponse>();
+  }
+
+  [Fact]
+  public async Task CreateToken_ReturnsStatusCode200_WhenCredentialsAreValid()
+  {
+    // Arrange
+    var client = CreateRestClient(_baseUrl);
+
+    var authRequest = new AuthRequest
+    {
+      Username = "admin",
+      Password = "password123"
+    };
+
+    var request = CreatePostRequest("auth");
+    request.AddJsonBody(authRequest);
+
+    // Act
+    var response = await client.ExecuteAsync<AuthResponse>(request);
+
+    // Assert
+    response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+  }
+
+  [Fact]
+  public async Task CreateToken_ReturnsStatusCode401_WhenCredentialsAreInvalid()
+  {
+    // Arrange
+    var client = CreateRestClient(_baseUrl);
+
+    var authRequest = new AuthRequest
+    {
+      Username = "invalidUser",
+      Password = "WrongPassword123"
+    };
+
+    var request = CreatePostRequest("auth");
+    request.AddJsonBody(authRequest);
+
+    // Act
+    var response = await client.ExecuteAsync<AuthResponse>(request);
+
+    // Assert
+    response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
   }
 
   // Helper Functions
