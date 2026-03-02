@@ -12,15 +12,9 @@ public class RestfulBookerAPITests
   private readonly string _bookingUrl;
   private readonly string _testUsername = "admin";
   private readonly string _testUserPassword = "password123";
-  private readonly RestClientOptions _options;
 
   public RestfulBookerAPITests()
   {
-    _options = new RestClientOptions(_baseUrl)
-    {
-      Authenticator = new HttpBasicAuthenticator(_testUsername, _testUserPassword)
-    };
-
     _authUrl = $"{_baseUrl}/auth";
     _bookingUrl = $"{_baseUrl}/booking";
   }
