@@ -124,6 +124,51 @@ public class RestfulBookerAPITests
     response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
   }
 
+  [Fact]
+  public async Task GetBookingById_ReturnsValidBooking()
+  {
+    // Arrange
+    var client = CreateRestClient(_baseUrl);
+    var request = CreateGetRequest("booking/{id}", "816");
+
+    // Act
+    var response = await client.ExecuteAsync<Booking>(request);
+
+    // Assert
+    var data = response.Data;
+
+    data.Should().NotBeNull();
+    data.Should().BeOfType<Booking>();
+  }
+
+  [Fact]
+  public async Task GetBookingById_ReturnsStatusCode200Ok()
+  {
+    // Arrange
+    var client = CreateRestClient(_baseUrl);
+    var request = CreateGetRequest("booking/{id}", "816");
+
+    // Act
+    var response = await client.ExecuteAsync<Booking>(request);
+
+    // Assert
+    response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+  }
+
+  [Fact]
+  public async Task GetBookingById_ReturnsStatusCode404_WhenBookingDoesNotExist()
+  {
+    // Arrange
+    var client = CreateRestClient(_baseUrl);
+    var request = CreateGetRequest("booking/{id}", "1");
+
+    // Act
+    var response = await client.ExecuteAsync<Booking>(request);
+
+    // Assert
+    response.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+  }
+
   // Helper Functions
   private RestRequest CreateGetRequest(string endpoint, string resourceId = "")
   {
