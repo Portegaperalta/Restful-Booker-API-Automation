@@ -163,7 +163,10 @@ public class RestfulBookerAPITests
   private RestClient CreateRestClient(string baseUrl)
   {
     var options = CreateRestClientOptions(baseUrl);
-    return new RestClient(options);
+    var client = new RestClient(options);
+
+    client.AddDefaultHeader("Accept", "application/json");
+    return client;
   }
 
   private RestClientOptions CreateRestClientOptions(string baseUrl)
