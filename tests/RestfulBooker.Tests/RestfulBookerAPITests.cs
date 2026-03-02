@@ -26,20 +26,50 @@ public class RestfulBookerAPITests
   }
 
   [Fact]
-  public void CreateToken_ReturnsValidAuthToken()
+  public async Task CreateToken_ReturnsValidAuthToken()
   {
 
   }
 
   // Helper Functions
-
-  private RestClient CreateRestClient()
+  private RestRequest CreateGetRequest(string endpoint)
   {
-    return new RestClient(_options);
+    var request = new RestRequest(endpoint, Method.Get);
+    return request;
   }
 
-  private RestRequest CreateRestRequest(string url)
+  private RestRequest CreatePostRequest(string endpoint)
   {
-    return new RestRequest(url);
+    var request = new RestRequest(endpoint, Method.Post);
+    return request;
+  }
+
+  private RestRequest CreatePutRequest(string endpoint)
+  {
+    var request = new RestRequest(endpoint, Method.Put);
+    return request;
+  }
+
+  private RestRequest CreatePatchRequest(string endpoint)
+  {
+    var request = new RestRequest(endpoint, Method.Patch);
+    return request;
+  }
+
+  private RestRequest CreateDeleteRequest(string endpoint)
+  {
+    var request = new RestRequest(endpoint, Method.Delete);
+    return request;
+  }
+
+  private RestClient CreateRestClient(string baseUrl)
+  {
+    var options = CreateRestClientOptions(baseUrl);
+    return new RestClient(options);
+  }
+
+  private RestClientOptions CreateRestClientOptions(string baseUrl)
+  {
+    return new RestClientOptions(baseUrl);
   }
 }
