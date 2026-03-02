@@ -18,6 +18,7 @@ public class RestfulBookerAPITests
     _outputHelper = outputHelper;
   }
 
+  // Auth - CreateToken Tests
   [Fact]
   public async Task CreateToken_ReturnsValidAuthToken()
   {
@@ -87,6 +88,7 @@ public class RestfulBookerAPITests
     response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
   }
 
+  // Booking - GetBookingIds Tests
   [Fact]
   public async Task GetBookingIds_ReturnsListOfBookingIds()
   {
@@ -118,6 +120,7 @@ public class RestfulBookerAPITests
     response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
   }
 
+  // Booking - GetBooking Tests
   [Fact]
   public async Task GetBookingById_ReturnsValidBooking()
   {
