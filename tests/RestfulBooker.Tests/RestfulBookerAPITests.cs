@@ -5,6 +5,8 @@ using Xunit;
 using FluentAssertions;
 using Models;
 using RestSharp.Authenticators;
+using models;
+using Xunit.Abstractions;
 
 public class RestfulBookerAPITests
 {
@@ -13,11 +15,13 @@ public class RestfulBookerAPITests
   private readonly string _bookingUrl;
   private readonly string _testUsername = "admin";
   private readonly string _testUserPassword = "password123";
+  private readonly ITestOutputHelper _outputHelper;
 
-  public RestfulBookerAPITests()
+  public RestfulBookerAPITests(ITestOutputHelper outputHelper)
   {
     _authUrl = $"{_baseUrl}/auth";
     _bookingUrl = $"{_baseUrl}/booking";
+    _outputHelper = outputHelper;
   }
 
   [Fact]
@@ -87,6 +91,37 @@ public class RestfulBookerAPITests
 
     // Assert
     response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
+  }
+
+  [Fact]
+  public async Task GetBookingIds_ReturnsListOfBookingIds()
+  {
+    // Arrange
+    var client = CreateRestClient(_baseUrl);
+    var request = CreateGetRequest("booking");
+
+    // Act
+    var response = await client.ExecuteAsync<List<BookingId>>(request);
+
+    // Assert
+    var data = response.Data;
+
+    data.Should().NotBeNull();
+    data.Should().BeOfType<List<BookingId>>();
+  }
+
+  [Fact]
+  public async Task GetBookingIds_ReturnsStatusCode200()
+  {
+    // Arrange
+    var client = CreateRestClient(_baseUrl);
+    var request = CreateGetRequest("booking");
+
+    // Act
+    var response = await client.ExecuteAsync<List<BookingId>>(request);
+
+    // Assert
+    response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
   }
 
   // Helper Functions
