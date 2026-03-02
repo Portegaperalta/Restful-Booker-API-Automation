@@ -125,9 +125,14 @@ public class RestfulBookerAPITests
   }
 
   // Helper Functions
-  private RestRequest CreateGetRequest(string endpoint)
+  private RestRequest CreateGetRequest(string endpoint, string resourceId = "")
   {
     var request = new RestRequest(endpoint, Method.Get);
+
+    if (string.IsNullOrEmpty(resourceId) is not true)
+    {
+      request.AddUrlSegment("id", resourceId);
+    }
     return request;
   }
 
