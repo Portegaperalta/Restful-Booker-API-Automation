@@ -312,9 +312,11 @@ public class RestfulBookerAPITests
     return request;
   }
 
-  private RestRequest CreateDeleteRequest(string endpoint)
+  private RestRequest CreateDeleteRequest(string endpoint, string resourceId)
   {
     var request = new RestRequest(endpoint, Method.Delete);
+    request.AddUrlSegment("id", resourceId);
+
     return request;
   }
 
