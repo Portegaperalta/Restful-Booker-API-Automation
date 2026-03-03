@@ -306,9 +306,11 @@ public class RestfulBookerAPITests
     return request;
   }
 
-  private RestRequest CreatePatchRequest(string endpoint)
+  private RestRequest CreatePatchRequest(string endpoint, string resourceId)
   {
     var request = new RestRequest(endpoint, Method.Patch);
+    request.AddUrlSegment("id", resourceId);
+
     return request;
   }
 
