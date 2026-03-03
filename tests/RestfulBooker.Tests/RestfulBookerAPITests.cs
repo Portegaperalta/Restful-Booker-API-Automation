@@ -166,6 +166,120 @@ public class RestfulBookerAPITests
     response.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
   }
 
+  // Booking - CreateBooking Tests
+  [Fact]
+  public async Task CreateBooking_PersistsDataInDatabase()
+  {
+    // Arrange
+    var client = CreateRestClient(_baseUrl);
+    var postRequest = CreatePostRequest("booking");
+
+    var postRequestBody = new BookingCreationRequest
+    {
+      FirstName = "Jim",
+      LastName = "Brown",
+      TotalPrice = 111,
+      DepositPaid = true,
+      BookingDates = new BookingDates
+      {
+        CheckIn = "2018-01-01",
+        CheckOut = "2019-01-01"
+      },
+      AdditionalNeeds = "Breakfast"
+    };
+
+    postRequest.AddJsonBody(postRequestBody);
+
+    //Act
+    var response = await client.ExecuteAsync<BookingCreationResponse>(postRequest);
+
+    //Assert
+    var postRequestData = response.Data;
+    postRequestData.Should().NotBeNull();
+
+    var getRequest = CreateGetRequest("booking/{id}", postRequestData.BookingId.ToString());
+    var getRequestResponse = await client.ExecuteAsync<Booking>(getRequest);
+    var bookingData = getRequestResponse.Data;
+
+    bookingData.Should().NotBeNull();
+    bookingData.FirstName.Should().Be(postRequestBody.FirstName);
+    bookingData.LastName.Should().Be(postRequestBody.LastName);
+    bookingData.DepositPaid.Should().Be(postRequestBody.DepositPaid);
+    bookingData.AdditionalNeeds.Should().Be(postRequestBody.AdditionalNeeds);
+  }
+
+  [Fact]
+  public async Task CreateBooking_ReturnsStatusCode200()
+  {
+    // Arrange
+    var client = CreateRestClient(_baseUrl);
+    var request = CreatePostRequest("booking");
+
+    var creationRequestBody = new BookingCreationRequest
+    {
+      FirstName = "Jim",
+      LastName = "Brown",
+      TotalPrice = 111,
+      DepositPaid = true,
+      BookingDates = new BookingDates
+      {
+        CheckIn = "2018-01-01",
+        CheckOut = "2019-01-01"
+      },
+      AdditionalNeeds = "Breakfast"
+    };
+
+    request.AddJsonBody(creationRequestBody);
+
+    //Act
+    var response = await client.ExecuteAsync<BookingCreationResponse>(request);
+
+    //Assert
+    response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+  }
+
+  [Fact]
+  public async Task CreateBooking_ReturnsStatusCode400_WhenRequestHasMissingFields()
+  {
+    // Arrange
+    var client = CreateRestClient(_baseUrl);
+    var request = CreatePostRequest("booking");
+
+    var creationRequestBody = new BookingCreationRequest
+    {
+      LastName = "Brown",
+      TotalPrice = 111,
+      DepositPaid = true,
+      AdditionalNeeds = "Breakfast"
+    };
+
+    request.AddJsonBody(creationRequestBody);
+
+    //Act
+    var response = await client.ExecuteAsync(request);
+
+    //Assert
+    response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+  }
+
+  [Fact]
+  public async Task CreateBooking_ReturnsStatusCode400_WhenRequestBodyIsEmpty()
+  {
+    // Arrange
+    var client = CreateRestClient(_baseUrl);
+    var request = CreatePostRequest("booking");
+
+    var creationRequestBody = new object { };
+
+    request.AddJsonBody(creationRequestBody);
+
+    //Act
+    var response = await client.ExecuteAsync(request);
+
+    //Assert
+    response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+  }
+
   // Helper Functions
   private RestRequest CreateGetRequest(string endpoint, string resourceId = "")
   {
