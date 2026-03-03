@@ -298,9 +298,11 @@ public class RestfulBookerAPITests
     return request;
   }
 
-  private RestRequest CreatePutRequest(string endpoint)
+  private RestRequest CreatePutRequest(string endpoint, string resourceId)
   {
     var request = new RestRequest(endpoint, Method.Put);
+    request.AddUrlSegment("id", resourceId);
+
     return request;
   }
 
