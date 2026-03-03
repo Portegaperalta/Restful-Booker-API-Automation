@@ -280,6 +280,102 @@ public class RestfulBookerAPITests
     response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
   }
 
+  // Booking - UpdateBooking Tests
+  [Fact]
+  public async Task UpdateBooking_UpdatesPersistedData()
+  {
+    // Arrange
+    var client = CreateRestClient(_baseUrl);
+    client.AddDefaultHeader("Cookie", "token=abc123");
+
+    var putRequest = CreatePutRequest("booking/{id}", "1");
+
+    var putRequestBody = new BookingUpdateRequest
+    {
+      FirstName = "James",
+      LastName = "Brown",
+      TotalPrice = 111,
+      DepositPaid = true,
+      BookingDates =
+      {
+        CheckIn = "2018-01-01",
+        CheckOut = "2019-01-01"
+      },
+      AdditionalNeeds = "Breakfast"
+    };
+
+    putRequest.AddJsonBody(putRequestBody);
+
+    // Act
+    await client.ExecuteAsync<BookingUpdateResponse>(putRequest);
+
+    // Assert
+    var getRequest = CreateGetRequest("booking/{id}", "1");
+    var getRequestResponse = await client.ExecuteAsync<Booking>(getRequest);
+    var updatedBookingData = getRequestResponse.Data;
+
+    updatedBookingData.Should().NotBeNull();
+    updatedBookingData.FirstName.Should().Be(putRequestBody.FirstName);
+    updatedBookingData.LastName.Should().Be(putRequestBody.LastName);
+  }
+
+  [Fact]
+  public async Task UpdateBooking_ReturnsStatusCode200()
+  {
+    // Arrange
+    var client = CreateRestClient(_baseUrl);
+    client.AddDefaultHeader("Cookie", "token=abc123");
+
+    var putRequest = CreatePutRequest("booking/{id}", "1");
+
+    var putRequestBody = new BookingUpdateRequest
+    {
+      FirstName = "James",
+      LastName = "Brown",
+      TotalPrice = 111,
+      DepositPaid = true,
+      BookingDates =
+      {
+        CheckIn = "2018-01-01",
+        CheckOut = "2019-01-01"
+      },
+      AdditionalNeeds = "Breakfast"
+    };
+
+    putRequest.AddJsonBody(putRequestBody);
+
+    // Act
+    var putResponse = await client.ExecuteAsync<BookingUpdateResponse>(putRequest);
+
+    // Assert
+    putResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+  }
+
+  [Fact]
+  public async Task UpdateBooking_ReturnsStatusCode400_WhenRequestBodyHasMissingFields()
+  {
+    // Arrange
+    var client = CreateRestClient(_baseUrl);
+    client.AddDefaultHeader("Cookie", "token=abc123");
+
+    var putRequest = CreatePutRequest("booking/{id}", "1");
+
+    var putRequestBody = new BookingUpdateRequest
+    {
+      LastName = "Brown",
+      TotalPrice = 111,
+      AdditionalNeeds = "Breakfast"
+    };
+
+    putRequest.AddJsonBody(putRequestBody);
+
+    // Act
+    var putResponse = await client.ExecuteAsync<BookingUpdateResponse>(putRequest);
+
+    // Assert
+    putResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+  }
+
   // Helper Functions
   private RestRequest CreateGetRequest(string endpoint, string resourceId = "")
   {
