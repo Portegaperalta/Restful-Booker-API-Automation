@@ -288,7 +288,29 @@ public class RestfulBookerAPITests
     var client = CreateRestClient(_baseUrl);
     client.AddDefaultHeader("Cookie", "token=abc123");
 
-    var putRequest = CreatePutRequest("booking/{id}", "1");
+    var postRequest = CreatePostRequest("booking");
+
+    var postRequestBody = new BookingCreationRequest
+    {
+      FirstName = "Jim",
+      LastName = "Brown",
+      TotalPrice = 111,
+      DepositPaid = true,
+      BookingDates = new BookingDates
+      {
+        CheckIn = "2018-01-01",
+        CheckOut = "2019-01-01"
+      },
+      AdditionalNeeds = "Breakfast"
+    };
+
+    postRequest.AddJsonBody(postRequestBody);
+
+    var postResponse = await client.ExecuteAsync<BookingCreationResponse>(postRequest);
+    postResponse.Data.Should().NotBeNull();
+
+    var bookingId = postResponse.Data.BookingId;
+    var putRequest = CreatePutRequest("booking/{id}", bookingId.ToString());
 
     var putRequestBody = new BookingUpdateRequest
     {
@@ -310,7 +332,7 @@ public class RestfulBookerAPITests
     await client.ExecuteAsync<BookingUpdateResponse>(putRequest);
 
     // Assert
-    var getRequest = CreateGetRequest("booking/{id}", "1");
+    var getRequest = CreateGetRequest("booking/{id}", bookingId.ToString());
     var getRequestResponse = await client.ExecuteAsync<Booking>(getRequest);
     var updatedBookingData = getRequestResponse.Data;
 
@@ -326,7 +348,30 @@ public class RestfulBookerAPITests
     var client = CreateRestClient(_baseUrl);
     client.AddDefaultHeader("Cookie", "token=abc123");
 
-    var putRequest = CreatePutRequest("booking/{id}", "1");
+    var postRequest = CreatePostRequest("booking");
+
+    var postRequestBody = new BookingCreationRequest
+    {
+      FirstName = "Jim",
+      LastName = "Brown",
+      TotalPrice = 111,
+      DepositPaid = true,
+      BookingDates = new BookingDates
+      {
+        CheckIn = "2018-01-01",
+        CheckOut = "2019-01-01"
+      },
+      AdditionalNeeds = "Breakfast"
+    };
+
+    postRequest.AddJsonBody(postRequestBody);
+
+    var postResponse = await client.ExecuteAsync<BookingCreationResponse>(postRequest);
+    postResponse.Data.Should().NotBeNull();
+
+    var bookingId = postResponse.Data.BookingId;
+
+    var putRequest = CreatePutRequest("booking/{id}", bookingId.ToString());
 
     var putRequestBody = new BookingUpdateRequest
     {
@@ -358,7 +403,30 @@ public class RestfulBookerAPITests
     var client = CreateRestClient(_baseUrl);
     client.AddDefaultHeader("Cookie", "token=abc123");
 
-    var putRequest = CreatePutRequest("booking/{id}", "1");
+    var postRequest = CreatePostRequest("booking");
+
+    var postRequestBody = new BookingCreationRequest
+    {
+      FirstName = "Jim",
+      LastName = "Brown",
+      TotalPrice = 111,
+      DepositPaid = true,
+      BookingDates = new BookingDates
+      {
+        CheckIn = "2018-01-01",
+        CheckOut = "2019-01-01"
+      },
+      AdditionalNeeds = "Breakfast"
+    };
+
+    postRequest.AddJsonBody(postRequestBody);
+
+    var postResponse = await client.ExecuteAsync<BookingCreationResponse>(postRequest);
+    postResponse.Data.Should().NotBeNull();
+
+    var bookingId = postResponse.Data.BookingId;
+
+    var putRequest = CreatePutRequest("booking/{id}", bookingId.ToString());
 
     var putRequestBody = new BookingUpdateRequest
     {
