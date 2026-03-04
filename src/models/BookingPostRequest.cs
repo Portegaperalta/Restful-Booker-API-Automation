@@ -5,20 +5,20 @@ namespace RestfulBooker.Models;
 public class BookingCreationRequest
 {
     [JsonPropertyName("firstname")]
-    public string FirstName { get; set; } = string.Empty;
+    public required string FirstName { get; set; }
 
     [JsonPropertyName("lastname")]
-    public string LastName { get; set; } = string.Empty;
+    public required string LastName { get; set; }
 
     [JsonPropertyName("totalprice")]
-    public int TotalPrice { get; set; }
+    public required int TotalPrice { get; set; }
 
     [JsonPropertyName("depositpaid")]
-    public bool DepositPaid { get; set; }
+    public required bool DepositPaid { get; set; }
 
     [JsonPropertyName("bookingdates")]
-    public BookingDates BookingDates { get; set; } = new();
+    public required BookingDates BookingDates { get; set; }
 
     [JsonPropertyName("additionalneeds")]
-    public string AdditionalNeeds { get; set; } = string.Empty;
+    public required string AdditionalNeeds { get; set; }
 }

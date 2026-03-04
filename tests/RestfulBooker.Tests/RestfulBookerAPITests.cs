@@ -245,11 +245,10 @@ public class RestfulBookerAPITests
     var client = CreateRestClient(_baseUrl);
     var request = CreatePostRequest("booking");
 
-    var creationRequestBody = new BookingCreationRequest
+    var creationRequestBody = new InvalidBookingPostRequest
     {
       LastName = "Brown",
       TotalPrice = 111,
-      DepositPaid = true,
       AdditionalNeeds = "Breakfast"
     };
 
