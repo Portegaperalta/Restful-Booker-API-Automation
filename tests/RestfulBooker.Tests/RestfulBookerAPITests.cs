@@ -286,7 +286,8 @@ public class RestfulBookerAPITests
   {
     // Arrange
     var client = CreateRestClient(_baseUrl);
-    client.AddDefaultHeader("Cookie", "token=abc123");
+    var token = await CreateToken(client);
+    client.AddDefaultHeader("Cookie", $"token={token}");
 
     var postRequest = CreatePostRequest("booking");
 
@@ -339,6 +340,11 @@ public class RestfulBookerAPITests
     updatedBookingData.Should().NotBeNull();
     updatedBookingData.FirstName.Should().Be(putRequestBody.FirstName);
     updatedBookingData.LastName.Should().Be(putRequestBody.LastName);
+    updatedBookingData.TotalPrice.Should().Be(putRequestBody.TotalPrice);
+    updatedBookingData.DepositPaid.Should().Be(putRequestBody.DepositPaid);
+    updatedBookingData.BookingDates.CheckIn.Should().Be(putRequestBody.BookingDates.CheckIn);
+    updatedBookingData.BookingDates.CheckOut.Should().Be(putRequestBody.BookingDates.CheckOut);
+    updatedBookingData.AdditionalNeeds.Should().Be(putRequestBody.AdditionalNeeds);
   }
 
   [Fact]
@@ -346,7 +352,8 @@ public class RestfulBookerAPITests
   {
     // Arrange
     var client = CreateRestClient(_baseUrl);
-    client.AddDefaultHeader("Cookie", "token=abc123");
+    var token = await CreateToken(client);
+    client.AddDefaultHeader("Cookie", $"token={token}");
 
     var postRequest = CreatePostRequest("booking");
 
