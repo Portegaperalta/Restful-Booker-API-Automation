@@ -408,7 +408,8 @@ public class RestfulBookerAPITests
   {
     // Arrange
     var client = CreateRestClient(_baseUrl);
-    client.AddDefaultHeader("Cookie", "token=abc123");
+    var token = await CreateToken(client);
+    client.AddDefaultHeader("Cookie", $"token={token}");
 
     var postRequest = CreatePostRequest("booking");
 
@@ -435,7 +436,7 @@ public class RestfulBookerAPITests
 
     var putRequest = CreatePutRequest("booking/{id}", bookingId.ToString());
 
-    var putRequestBody = new BookingUpdateRequest
+    var putRequestBody = new InvalidBookingPutRequest
     {
       LastName = "Brown",
       TotalPrice = 111,
