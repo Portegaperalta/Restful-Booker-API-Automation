@@ -157,7 +157,7 @@ public class RestfulBookerAPITests
   {
     // Arrange
     var client = CreateRestClient(_baseUrl);
-    var request = CreateGetRequest("booking/{id}", "1");
+    var request = CreateGetRequest("booking/{id}", "80000");
 
     // Act
     var response = await client.ExecuteAsync<Booking>(request);
