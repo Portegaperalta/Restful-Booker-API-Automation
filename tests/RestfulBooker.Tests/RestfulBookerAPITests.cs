@@ -457,7 +457,8 @@ public class RestfulBookerAPITests
   {
     // Arrange
     var client = CreateRestClient(_baseUrl);
-    client.AddDefaultHeader("Cookie", "token=abc123");
+    var token = await CreateToken(client);
+    client.AddDefaultHeader("Cookie", $"token={token}");
 
     var postRequest = CreatePostRequest("booking");
 
@@ -510,7 +511,8 @@ public class RestfulBookerAPITests
   {
     // Arrange
     var client = CreateRestClient(_baseUrl);
-    client.AddDefaultHeader("Cookie", "token=abc123");
+    var token = await CreateToken(client);
+    client.AddDefaultHeader("Cookie", $"token={token}");
 
     var postRequest = CreatePostRequest("booking");
 
@@ -545,7 +547,7 @@ public class RestfulBookerAPITests
     patchRequest.AddJsonBody(patchRequestBody);
 
     // Act
-    var patchResponse = await client.ExecuteAsync<BookingUpdateResponse>(patchRequest);
+    var patchResponse = await client.ExecuteAsync(patchRequest);
 
     // Assert
     patchResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -557,7 +559,8 @@ public class RestfulBookerAPITests
   {
     // Arrange
     var client = CreateRestClient(_baseUrl);
-    client.AddDefaultHeader("Cookie", "token=abc123");
+    var token = await CreateToken(client);
+    client.AddDefaultHeader("Cookie", $"token={token}");
 
     var patchRequest = CreatePatchRequest("booking/{id}", "8000000");
 
@@ -582,7 +585,8 @@ public class RestfulBookerAPITests
   {
     // Arrange
     var client = CreateRestClient(_baseUrl);
-    client.AddDefaultHeader("Cookie", "token=abc123");
+    var token = await CreateToken(client);
+    client.AddDefaultHeader("Cookie", $"token={token}");
 
     var postRequest = CreatePostRequest("booking");
 
