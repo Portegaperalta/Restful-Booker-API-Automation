@@ -654,6 +654,26 @@ public class RestfulBookerAPITests
     return request;
   }
 
+  private async Task<string> CreateToken(RestClient client)
+  {
+    var authRequest = new AuthRequest
+    {
+      Username = "admin",
+      Password = "password123"
+    };
+
+    var request = CreatePostRequest("auth");
+    request.AddJsonBody(authRequest);
+
+    var response = await client.ExecuteAsync<AuthResponse>(request);
+
+    if (response.Data is null)
+    {
+      throw new Exception("Token creation failed");
+    }
+
+    return response.Data.Token;
+  }
   private RestClient CreateRestClient(string baseUrl)
   {
     var options = CreateRestClientOptions(baseUrl);
