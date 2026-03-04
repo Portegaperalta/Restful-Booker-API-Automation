@@ -444,6 +444,174 @@ public class RestfulBookerAPITests
     putResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
   }
 
+  // Booking - PartialUpdateBooking Tests
+  [Fact]
+  public async Task PartialUpdateBooking_UpdatesPersistedData()
+  {
+    // Arrange
+    var client = CreateRestClient(_baseUrl);
+    client.AddDefaultHeader("Cookie", "token=abc123");
+
+    var postRequest = CreatePostRequest("booking");
+
+    var postRequestBody = new BookingCreationRequest
+    {
+      FirstName = "Jim",
+      LastName = "Brown",
+      TotalPrice = 111,
+      DepositPaid = true,
+      BookingDates = new BookingDates
+      {
+        CheckIn = "2018-01-01",
+        CheckOut = "2019-01-01"
+      },
+      AdditionalNeeds = "Breakfast"
+    };
+
+    postRequest.AddJsonBody(postRequestBody);
+
+    var postResponse = await client.ExecuteAsync<BookingCreationResponse>(postRequest);
+    postResponse.Data.Should().NotBeNull();
+
+    var bookingId = postResponse.Data.BookingId;
+    var patchRequest = CreatePatchRequest("booking/{id}", bookingId.ToString());
+
+    var patchRequestBody = new BookingPatchRequest
+    {
+      FirstName = "James",
+      LastName = "Brown",
+    };
+
+    patchRequest.AddJsonBody(patchRequestBody);
+
+    // Act
+    await client.ExecuteAsync<BookingUpdateResponse>(patchRequest);
+
+    // Assert
+    var getRequest = CreateGetRequest("booking/{id}", bookingId.ToString());
+    var getRequestResponse = await client.ExecuteAsync<Booking>(getRequest);
+
+    var updatedBookingData = getRequestResponse.Data;
+
+    updatedBookingData.Should().NotBeNull();
+    updatedBookingData.FirstName.Should().Be(patchRequestBody.FirstName);
+    updatedBookingData.LastName.Should().Be(patchRequestBody.LastName);
+  }
+
+  [Fact]
+  public async Task PartialUpdateBooking_ReturnsStatusCode200()
+  {
+    // Arrange
+    var client = CreateRestClient(_baseUrl);
+    client.AddDefaultHeader("Cookie", "token=abc123");
+
+    var postRequest = CreatePostRequest("booking");
+
+    var postRequestBody = new BookingCreationRequest
+    {
+      FirstName = "Jim",
+      LastName = "Brown",
+      TotalPrice = 111,
+      DepositPaid = true,
+      BookingDates = new BookingDates
+      {
+        CheckIn = "2018-01-01",
+        CheckOut = "2019-01-01"
+      },
+      AdditionalNeeds = "Breakfast"
+    };
+
+    postRequest.AddJsonBody(postRequestBody);
+
+    var postResponse = await client.ExecuteAsync<BookingCreationResponse>(postRequest);
+    postResponse.Data.Should().NotBeNull();
+
+    var bookingId = postResponse.Data.BookingId;
+    var patchRequest = CreatePatchRequest("booking/{id}", bookingId.ToString());
+
+    var patchRequestBody = new BookingPatchRequest
+    {
+      FirstName = "James",
+      LastName = "Brown",
+    };
+
+    patchRequest.AddJsonBody(patchRequestBody);
+
+    // Act
+    var patchResponse = await client.ExecuteAsync<BookingUpdateResponse>(patchRequest);
+
+    // Assert
+    patchResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+  }
+
+  [Fact]
+  public async Task
+  PartialUpdateBooking_ReturnsStatusCode404_WhenBookingDoesNotExist()
+  {
+    // Arrange
+    var client = CreateRestClient(_baseUrl);
+    client.AddDefaultHeader("Cookie", "token=abc123");
+
+    var patchRequest = CreatePatchRequest("booking/{id}", "8000000");
+
+    var patchRequestBody = new BookingPatchRequest
+    {
+      FirstName = "James",
+      LastName = "Brown",
+    };
+
+    patchRequest.AddJsonBody(patchRequestBody);
+
+    // Act
+    var patchResponse = await client.ExecuteAsync<BookingUpdateResponse>(patchRequest);
+
+    // Assert
+    patchResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+  }
+
+  [Fact]
+  public async Task
+  PartialUpdateBooking_ReturnsStatusCode400_WhenRequestHasInvalidFields()
+  {
+    // Arrange
+    var client = CreateRestClient(_baseUrl);
+    client.AddDefaultHeader("Cookie", "token=abc123");
+
+    var postRequest = CreatePostRequest("booking");
+
+    var postRequestBody = new BookingCreationRequest
+    {
+      FirstName = "Jim",
+      LastName = "Brown",
+      TotalPrice = 111,
+      DepositPaid = true,
+      BookingDates = new BookingDates
+      {
+        CheckIn = "2018-01-01",
+        CheckOut = "2019-01-01"
+      },
+      AdditionalNeeds = "Breakfast"
+    };
+
+    postRequest.AddJsonBody(postRequestBody);
+
+    var postResponse = await client.ExecuteAsync<BookingCreationResponse>(postRequest);
+    postResponse.Data.Should().NotBeNull();
+
+    var bookingId = postResponse.Data.BookingId;
+    var patchRequest = CreatePatchRequest("booking/{id}", bookingId.ToString());
+
+    var invalidPatchRequestBody = new InvalidBookingPatchRequest { Age = 30 };
+
+    patchRequest.AddJsonBody(invalidPatchRequestBody);
+
+    // Act
+    var patchResponse = await client.ExecuteAsync<BookingUpdateResponse>(patchRequest);
+
+    // Assert
+    patchResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+  }
+
   // Helper Functions
   private RestRequest CreateGetRequest(string endpoint, string resourceId = "")
   {
