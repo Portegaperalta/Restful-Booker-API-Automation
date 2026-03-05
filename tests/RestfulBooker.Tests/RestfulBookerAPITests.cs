@@ -623,6 +623,145 @@ public class RestfulBookerAPITests
     patchResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
   }
 
+  // Booking - DeleteBooking Tests
+  [Fact]
+  public async Task DeleteBooking_DeletesPersistedData()
+  {
+    // Arrange
+    var client = CreateRestClient(_baseUrl);
+    var token = await CreateToken(client);
+    client.AddDefaultHeader("Cookie", $"token={token}");
+
+    var postRequest = CreatePostRequest("booking");
+
+    var postRequestBody = new BookingPostRequest
+    {
+      FirstName = "Jim",
+      LastName = "Brown",
+      TotalPrice = 111,
+      DepositPaid = true,
+      BookingDates = new BookingDates
+      {
+        CheckIn = "2018-01-01",
+        CheckOut = "2019-01-01"
+      },
+      AdditionalNeeds = "Breakfast"
+    };
+
+    postRequest.AddJsonBody(postRequestBody);
+
+    var postResponse = await client.ExecuteAsync<BookingPostResponse>(postRequest);
+    postResponse.Data.Should().NotBeNull();
+
+    var bookingId = postResponse.Data.BookingId.ToString();
+
+    var deleteRequest = CreateDeleteRequest("booking/{id}", bookingId);
+
+    //Act
+    await client.ExecuteAsync(deleteRequest);
+
+    //Assert
+    var getRequest = CreateGetRequest("booking/{id}", bookingId);
+    var getResponse = await client.ExecuteAsync<Booking>(getRequest);
+
+    getResponse.Data.Should().BeNull();
+  }
+
+  [Fact]
+  public async Task DeleteBooking_ReturnsStatusCode204()
+  {
+    // Arrange
+    var client = CreateRestClient(_baseUrl);
+    var token = await CreateToken(client);
+    client.AddDefaultHeader("Cookie", $"token={token}");
+
+    var postRequest = CreatePostRequest("booking");
+
+    var postRequestBody = new BookingPostRequest
+    {
+      FirstName = "Jim",
+      LastName = "Brown",
+      TotalPrice = 111,
+      DepositPaid = true,
+      BookingDates = new BookingDates
+      {
+        CheckIn = "2018-01-01",
+        CheckOut = "2019-01-01"
+      },
+      AdditionalNeeds = "Breakfast"
+    };
+
+    postRequest.AddJsonBody(postRequestBody);
+
+    var postResponse = await client.ExecuteAsync<BookingPostResponse>(postRequest);
+    postResponse.Data.Should().NotBeNull();
+
+    var bookingId = postResponse.Data.BookingId.ToString();
+
+    var deleteRequest = CreateDeleteRequest("booking/{id}", bookingId);
+
+    //Act
+    var deleteResponse = await client.ExecuteAsync(deleteRequest);
+
+    //Assert
+    deleteResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.NoContent);
+  }
+
+  [Fact]
+  public async Task DeleteBooking_ReturnsStatusCode404_WhenBookingDoesNotExist()
+  {
+    // Arrange
+    var client = CreateRestClient(_baseUrl);
+    var token = await CreateToken(client);
+    client.AddDefaultHeader("Cookie", $"token={token}");
+
+    var deleteRequest = CreateDeleteRequest("booking/{id}", "80000");
+
+    //Act
+    var deleteResponse = await client.ExecuteAsync(deleteRequest);
+
+    //Assert
+    deleteResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+  }
+
+  [Fact]
+  public async Task DeleteBooking_ReturnsStatusCode401_WhenUserDoesNotHaveAuthToken()
+  {
+    // Arrange
+    var client = CreateRestClient(_baseUrl);
+
+    var postRequest = CreatePostRequest("booking");
+
+    var postRequestBody = new BookingPostRequest
+    {
+      FirstName = "Jim",
+      LastName = "Brown",
+      TotalPrice = 111,
+      DepositPaid = true,
+      BookingDates = new BookingDates
+      {
+        CheckIn = "2018-01-01",
+        CheckOut = "2019-01-01"
+      },
+      AdditionalNeeds = "Breakfast"
+    };
+
+    postRequest.AddJsonBody(postRequestBody);
+
+    var postResponse = await client.ExecuteAsync<BookingPostResponse>(postRequest);
+    postResponse.Data.Should().NotBeNull();
+
+    var bookingId = postResponse.Data.BookingId.ToString();
+
+    var deleteRequest = CreateDeleteRequest("booking/{id}", bookingId);
+
+    //Act
+    var deleteResponse = await client.ExecuteAsync(deleteRequest);
+
+    //Assert
+    deleteResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
+  }
+
   // Helper Functions
   private RestRequest CreateGetRequest(string endpoint, string resourceId = "")
   {
