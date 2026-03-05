@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace RestfulBooker.Models;
 
-public class BookingCreationRequest
+public class BookingPostRequest
 {
     [JsonPropertyName("firstname")]
     public required string FirstName { get; set; }

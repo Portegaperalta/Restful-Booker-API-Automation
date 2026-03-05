@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace RestfulBooker.Models;
 
-public class BookingUpdateRequest
+public class BookingPutRequest
 {
     [JsonPropertyName("firstname")]
     public string FirstName { get; set; } = string.Empty;

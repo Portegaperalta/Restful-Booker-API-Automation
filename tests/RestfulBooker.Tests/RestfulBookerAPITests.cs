@@ -25,7 +25,7 @@ public class RestfulBookerAPITests
     //Arrange
     var client = CreateRestClient(_baseUrl);
 
-    var authRequest = new AuthRequest
+    var authRequest = new AuthPostRequest
     {
       Username = "admin",
       Password = "password123"
@@ -35,13 +35,13 @@ public class RestfulBookerAPITests
     request.AddJsonBody(authRequest);
 
     //Act
-    var response = await client.ExecuteAsync<AuthResponse>(request);
+    var response = await client.ExecuteAsync<AuthPostResponse>(request);
 
     //Assert
     var data = response.Data;
 
     data.Should().NotBeNull();
-    data.Should().BeOfType<AuthResponse>();
+    data.Should().BeOfType<AuthPostResponse>();
   }
 
   [Fact]
@@ -50,7 +50,7 @@ public class RestfulBookerAPITests
     // Arrange
     var client = CreateRestClient(_baseUrl);
 
-    var authRequest = new AuthRequest
+    var authRequest = new AuthPostRequest
     {
       Username = "admin",
       Password = "password123"
@@ -60,7 +60,7 @@ public class RestfulBookerAPITests
     request.AddJsonBody(authRequest);
 
     // Act
-    var response = await client.ExecuteAsync<AuthResponse>(request);
+    var response = await client.ExecuteAsync<AuthPostResponse>(request);
 
     // Assert
     response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -72,7 +72,7 @@ public class RestfulBookerAPITests
     // Arrange
     var client = CreateRestClient(_baseUrl);
 
-    var authRequest = new AuthRequest
+    var authRequest = new AuthPostRequest
     {
       Username = "invalidUser",
       Password = "WrongPassword123"
@@ -82,7 +82,7 @@ public class RestfulBookerAPITests
     request.AddJsonBody(authRequest);
 
     // Act
-    var response = await client.ExecuteAsync<AuthResponse>(request);
+    var response = await client.ExecuteAsync<AuthPostResponse>(request);
 
     // Assert
     response.StatusCode.Should().Be(System.Net.HttpStatusCode.Unauthorized);
@@ -174,7 +174,7 @@ public class RestfulBookerAPITests
     var client = CreateRestClient(_baseUrl);
     var postRequest = CreatePostRequest("booking");
 
-    var postRequestBody = new BookingCreationRequest
+    var postRequestBody = new BookingPostRequest
     {
       FirstName = "Jim",
       LastName = "Brown",
@@ -191,7 +191,7 @@ public class RestfulBookerAPITests
     postRequest.AddJsonBody(postRequestBody);
 
     //Act
-    var response = await client.ExecuteAsync<BookingCreationResponse>(postRequest);
+    var response = await client.ExecuteAsync<BookingPostResponse>(postRequest);
 
     //Assert
     var postRequestData = response.Data;
@@ -215,7 +215,7 @@ public class RestfulBookerAPITests
     var client = CreateRestClient(_baseUrl);
     var request = CreatePostRequest("booking");
 
-    var creationRequestBody = new BookingCreationRequest
+    var creationRequestBody = new BookingPostRequest
     {
       FirstName = "Jim",
       LastName = "Brown",
@@ -232,7 +232,7 @@ public class RestfulBookerAPITests
     request.AddJsonBody(creationRequestBody);
 
     //Act
-    var response = await client.ExecuteAsync<BookingCreationResponse>(request);
+    var response = await client.ExecuteAsync<BookingPostResponse>(request);
 
     //Assert
     response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -290,7 +290,7 @@ public class RestfulBookerAPITests
 
     var postRequest = CreatePostRequest("booking");
 
-    var postRequestBody = new BookingCreationRequest
+    var postRequestBody = new BookingPostRequest
     {
       FirstName = "Jim",
       LastName = "Brown",
@@ -306,13 +306,13 @@ public class RestfulBookerAPITests
 
     postRequest.AddJsonBody(postRequestBody);
 
-    var postResponse = await client.ExecuteAsync<BookingCreationResponse>(postRequest);
+    var postResponse = await client.ExecuteAsync<BookingPostResponse>(postRequest);
     postResponse.Data.Should().NotBeNull();
 
     var bookingId = postResponse.Data.BookingId;
     var putRequest = CreatePutRequest("booking/{id}", bookingId.ToString());
 
-    var putRequestBody = new BookingUpdateRequest
+    var putRequestBody = new BookingPutRequest
     {
       FirstName = "James",
       LastName = "Brown",
@@ -329,7 +329,7 @@ public class RestfulBookerAPITests
     putRequest.AddJsonBody(putRequestBody);
 
     // Act
-    await client.ExecuteAsync<BookingUpdateResponse>(putRequest);
+    await client.ExecuteAsync<BookingPutResponse>(putRequest);
 
     // Assert
     var getRequest = CreateGetRequest("booking/{id}", bookingId.ToString());
@@ -356,7 +356,7 @@ public class RestfulBookerAPITests
 
     var postRequest = CreatePostRequest("booking");
 
-    var postRequestBody = new BookingCreationRequest
+    var postRequestBody = new BookingPostRequest
     {
       FirstName = "Jim",
       LastName = "Brown",
@@ -372,14 +372,14 @@ public class RestfulBookerAPITests
 
     postRequest.AddJsonBody(postRequestBody);
 
-    var postResponse = await client.ExecuteAsync<BookingCreationResponse>(postRequest);
+    var postResponse = await client.ExecuteAsync<BookingPostResponse>(postRequest);
     postResponse.Data.Should().NotBeNull();
 
     var bookingId = postResponse.Data.BookingId;
 
     var putRequest = CreatePutRequest("booking/{id}", bookingId.ToString());
 
-    var putRequestBody = new BookingUpdateRequest
+    var putRequestBody = new BookingPutRequest
     {
       FirstName = "James",
       LastName = "Brown",
@@ -396,7 +396,7 @@ public class RestfulBookerAPITests
     putRequest.AddJsonBody(putRequestBody);
 
     // Act
-    var putResponse = await client.ExecuteAsync<BookingUpdateResponse>(putRequest);
+    var putResponse = await client.ExecuteAsync<BookingPutResponse>(putRequest);
 
     // Assert
     putResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
@@ -412,7 +412,7 @@ public class RestfulBookerAPITests
 
     var postRequest = CreatePostRequest("booking");
 
-    var postRequestBody = new BookingCreationRequest
+    var postRequestBody = new BookingPostRequest
     {
       FirstName = "Jim",
       LastName = "Brown",
@@ -428,7 +428,7 @@ public class RestfulBookerAPITests
 
     postRequest.AddJsonBody(postRequestBody);
 
-    var postResponse = await client.ExecuteAsync<BookingCreationResponse>(postRequest);
+    var postResponse = await client.ExecuteAsync<BookingPostResponse>(postRequest);
     postResponse.Data.Should().NotBeNull();
 
     var bookingId = postResponse.Data.BookingId;
@@ -445,7 +445,7 @@ public class RestfulBookerAPITests
     putRequest.AddJsonBody(putRequestBody);
 
     // Act
-    var putResponse = await client.ExecuteAsync<BookingUpdateResponse>(putRequest);
+    var putResponse = await client.ExecuteAsync<BookingPutResponse>(putRequest);
 
     // Assert
     putResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
@@ -462,7 +462,7 @@ public class RestfulBookerAPITests
 
     var postRequest = CreatePostRequest("booking");
 
-    var postRequestBody = new BookingCreationRequest
+    var postRequestBody = new BookingPostRequest
     {
       FirstName = "Jim",
       LastName = "Brown",
@@ -478,7 +478,7 @@ public class RestfulBookerAPITests
 
     postRequest.AddJsonBody(postRequestBody);
 
-    var postResponse = await client.ExecuteAsync<BookingCreationResponse>(postRequest);
+    var postResponse = await client.ExecuteAsync<BookingPostResponse>(postRequest);
     postResponse.Data.Should().NotBeNull();
 
     var bookingId = postResponse.Data.BookingId;
@@ -493,7 +493,7 @@ public class RestfulBookerAPITests
     patchRequest.AddJsonBody(patchRequestBody);
 
     // Act
-    await client.ExecuteAsync<BookingUpdateResponse>(patchRequest);
+    await client.ExecuteAsync(patchRequest);
 
     // Assert
     var getRequest = CreateGetRequest("booking/{id}", bookingId.ToString());
@@ -516,7 +516,7 @@ public class RestfulBookerAPITests
 
     var postRequest = CreatePostRequest("booking");
 
-    var postRequestBody = new BookingCreationRequest
+    var postRequestBody = new BookingPostRequest
     {
       FirstName = "Jim",
       LastName = "Brown",
@@ -532,7 +532,7 @@ public class RestfulBookerAPITests
 
     postRequest.AddJsonBody(postRequestBody);
 
-    var postResponse = await client.ExecuteAsync<BookingCreationResponse>(postRequest);
+    var postResponse = await client.ExecuteAsync<BookingPostResponse>(postRequest);
     postResponse.Data.Should().NotBeNull();
 
     var bookingId = postResponse.Data.BookingId;
@@ -573,7 +573,7 @@ public class RestfulBookerAPITests
     patchRequest.AddJsonBody(patchRequestBody);
 
     // Act
-    var patchResponse = await client.ExecuteAsync<BookingUpdateResponse>(patchRequest);
+    var patchResponse = await client.ExecuteAsync<BookingPatchResponse>(patchRequest);
 
     // Assert
     patchResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
@@ -590,7 +590,7 @@ public class RestfulBookerAPITests
 
     var postRequest = CreatePostRequest("booking");
 
-    var postRequestBody = new BookingCreationRequest
+    var postRequestBody = new BookingPostRequest
     {
       FirstName = "Jim",
       LastName = "Brown",
@@ -606,7 +606,7 @@ public class RestfulBookerAPITests
 
     postRequest.AddJsonBody(postRequestBody);
 
-    var postResponse = await client.ExecuteAsync<BookingCreationResponse>(postRequest);
+    var postResponse = await client.ExecuteAsync<BookingPostResponse>(postRequest);
     postResponse.Data.Should().NotBeNull();
 
     var bookingId = postResponse.Data.BookingId;
@@ -617,7 +617,7 @@ public class RestfulBookerAPITests
     patchRequest.AddJsonBody(invalidPatchRequestBody);
 
     // Act
-    var patchResponse = await client.ExecuteAsync<BookingUpdateResponse>(patchRequest);
+    var patchResponse = await client.ExecuteAsync<BookingPatchResponse>(patchRequest);
 
     // Assert
     patchResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
