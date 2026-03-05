@@ -1,7 +1,7 @@
 # Project Description
 API Automation test suite made with XUnit, RestShap, & FluentAssertions for the [Restful Booker API](https://restful-booker.herokuapp.com/apidoc/index.html#api-Booking-PartialUpdateBooking). The project is designed to demonstrate industry-standard API testing, robust validation, and integration into a CI/CD pipeline.
 
-Includes GitHub Actions CI, JWT Auth, and STLC deliverables. 
+Includes GitHub Actions CI, Auth, and STLC deliverables. 
 
 ### Note: The Restful Booker API is a "playground" API that contains intentional bugs and non-standard behaviors for testing practice.
 ### If the GitHub Actions build is "Failing," please check the Issues tab where these specific API bugs are documented as "Known Issues."
