@@ -15,7 +15,7 @@ Includes GitHub Actions CI, JWT Auth, and STLC deliverables.
 Restful-Booker-API-Automation/
 ├── .github/
 │   └── workflows/          # GitHub Actions CI 
-├── docs/                   # STLC Deliverables (Test Plan, Test Cases)
+├── docs/                   # STLC Deliverables (Test Plan, Test Cases/Test Matrix)
 ├── src/
 │   ├── Models/             # Request/Response POCO classes
 ├── tests/
