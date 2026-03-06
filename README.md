@@ -3,8 +3,8 @@ API Automation test suite made with XUnit, RestShap, & FluentAssertions for the 
 
 Includes GitHub Actions CI, Auth, and STLC deliverables. 
 
-### Note: The Restful Booker API is a "playground" API that contains intentional bugs and non-standard behaviors for testing practice.
-### If the GitHub Actions build is "Failing," please check the Issues tab where these specific API bugs are documented as "Known Issues."
+**Note:** The Restful Booker API is a "playground" API that contains intentional bugs and non-standard behaviors for testing practice.
+If the GitHub Actions build is "Failing," please check the Issues tab where these specific API bugs are documented as "Known Issues".
 
 # Tech Stack: 
 ### - Framework: .NET 10
